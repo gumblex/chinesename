@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import re
-import zhconv
+from zhconv import convert as zhconv
 
 transformtable = (
 (re.compile('([nl])v'), r'\1ü'),
@@ -49,7 +49,6 @@ def uniq(seq): # Dave Kirby
     return [x for x in seq if x not in seen and not seen.add(x)]
 
 dic = {}
-dics = {}
 
 started = False
 with open('luna_pinyin.dict.yaml') as f:
@@ -67,22 +66,10 @@ with open('luna_pinyin.dict.yaml') as f:
                 p = 0
             if len(w) > 1:
                 continue
-            if zhconv.issimp(w) is True:
-                if w in dics:
-                    dics[w].append((-p, c))
-                else:
-                    dics[w] = [(-p, c)]
+            if w in dic:
+                dic[w].append((-p, c))
             else:
-                if w in dic:
-                    dic[w].append((-p, c))
-                else:
-                    dic[w] = [(-p, c)]
-                ws = zhconv.convert(w, 'zh-hans')
-                if ws != w:
-                    if ws in dic:
-                        dic[ws].append((-p, c))
-                    else:
-                        dic[ws] = [(-p, c)]
+                dic[w] = [(-p, c)]
         elif ln == '...':
             started = True
 
@@ -101,11 +88,7 @@ pinyin_dict = {
 
 with open('pinyin_dict.py', 'w') as f:
     f.write(header)
-    for c in sorted(dic.keys() | dics.keys()):
-        dc = sorted(dic.get(c, []) + dics.get(c, []))
-        if any(i[0] for i in dc):
-            lst = ','.join(uniq(i[1] for i in dc if i[0] < -0.05) or uniq(i[1] for i in dc))
-        else:
-            lst = ','.join(uniq(i[1] for i in dc))
+    for c in sorted(dic):
+        lst = ','.join(i[1] for i in sorted(uniq(dic[c])))
         f.write("0x%04x: '%s', # %s\n" % (ord(c), lst, c))
     f.write('}\n')
