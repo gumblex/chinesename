@@ -48,7 +48,7 @@ d = defaultdict(list)
 
 for k, v in pinyin_dict.items():
     for p in v.split(','):
-        notone = untone(p.strip(' ㄧ'))
+        notone = untone(p.strip())
         d[notone].append(chr(k))
 
 trie = defaultdict(set)

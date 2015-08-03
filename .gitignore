@@ -57,4 +57,4 @@ docs/_build/
 target/
 
 orig/
-terra_pinyin.dict.yaml
+*.dict.yaml

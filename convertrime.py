@@ -51,24 +51,25 @@ def uniq(seq): # Dave Kirby
 dic = {}
 
 started = False
-with open('terra_pinyin.dict.yaml') as f:
+with open('luna_pinyin.dict.yaml') as f:
     for ln in f:
         ln = ln.strip()
-        if started and ln:
+        if started and ln and ln[0] != '#':
             l = ln.split('\t')
-            w, c = l[0], pynum2tone(l[1])
+            w, c = l[0], l[1]
+            if len(l) == 3:
+                if l[2][-1] == '%':
+                    p = float(l[2][:-1])/100
+                else:
+                    p = float(l[2])
+            else:
+                p = 0
             if len(w) > 1:
                 continue
             if w in dic:
-                dic[w].append(c)
+                dic[w].append((-p, c))
             else:
-                dic[w] = [c]
-            ws = zhconv(w, 'zh-hans')
-            if ws != w:
-                if ws in dic:
-                    dic[ws].append(c)
-                else:
-                    dic[ws] = [c]
+                dic[w] = [(-p, c)]
         elif ln == '...':
             started = True
 
@@ -78,7 +79,7 @@ header = '''#!/usr/bin/env python
 from __future__ import unicode_literals
 
 """
-Pinyin dictionary from librime/terra_pinyin
+Pinyin dictionary from librime/luna_pinyin
 """
 
 # Unicode 编码作为字典的 key
@@ -88,5 +89,6 @@ pinyin_dict = {
 with open('pinyin_dict.py', 'w') as f:
     f.write(header)
     for c in sorted(dic):
-        f.write("0x%04x: '%s', # %s\n" % (ord(c), ','.join(uniq(dic[c])), c))
+        lst = ','.join(i[1] for i in sorted(uniq(dic[c])))
+        f.write("0x%04x: '%s', # %s\n" % (ord(c), lst, c))
     f.write('}\n')
