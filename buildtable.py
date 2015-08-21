@@ -54,7 +54,7 @@ for k, v in pinyin_dict.items():
 trie = defaultdict(set)
 
 for p in d:
-    d[p] = ''.join(frozenset(d[p]))
+    d[p] = ''.join(sorted(frozenset(d[p])))
     trie[p[0]].add(p)
 
 surnames = defaultdict(list)
