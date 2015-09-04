@@ -9267,7 +9267,7 @@ pinyin_dict = {
 0x5b7e: 'ying', # 孾
 0x5b7f: 'luan,lvan', # 孿
 0x5b80: 'mian', # 宀
-0x5b81: 'zhu,ning', # 宁
+0x5b81: 'ning', # 宁
 0x5b82: 'rong', # 宂
 0x5b83: 'ta,tuo', # 它
 0x5b84: 'gui,jiu', # 宄
@@ -19470,7 +19470,7 @@ pinyin_dict = {
 0x8360: 'qi,ji', # 荠
 0x8361: 'dang,tang', # 荡
 0x8362: 'yu', # 荢
-0x8363: 'ce,rong', # 荣
+0x8363: 'rong', # 荣
 0x8364: 'hun,xun', # 荤
 0x8365: 'xing', # 荥
 0x8366: 'luo', # 荦
